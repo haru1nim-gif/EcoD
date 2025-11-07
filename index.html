@@ -1,571 +1,732 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RE:MAKE SPACE — 업사이클링 디자인 큐레이션</title>
-  <meta name="description" content="폐패션·뷰티 쓰레기를 작품으로: 업사이클링 디자인 갤러리, 튜토리얼, 협업 플랫폼" />
-  <style>
-    /* Reset & base */
-    :root{
-      --bg:#FBFAF6;
-      --accent:#2E8B57; /* sea green */
-      --muted:#7A7A7A;
-      --card:#FFFFFF;
-      --glass: rgba(255,255,255,0.6);
-      --maxw:1200px;
-      --radius:12px;
-      --shadow: 0 6px 18px rgba(20,20,20,0.08);
-      --mono: 'Helvetica Neue', Arial, sans-serif;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:var(--mono);
-      background:linear-gradient(180deg,var(--bg),#F2F6F3);
-      color:#222;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.45;
-      -webkit-overflow-scrolling:touch;
-      scroll-behavior:smooth;
-    }
-    a{color:inherit;text-decoration:none}
-    .container{max-width:var(--maxw);margin:0 auto;padding:28px;}
-    header{
-      position:sticky;top:0;z-index:60;
-      backdrop-filter: blur(6px);
-      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
-      border-bottom:1px solid rgba(0,0,0,0.04);
-    }
-    .nav{
-      display:flex;align-items:center;gap:18px;padding:12px 28px;
-      justify-content:space-between;
-    }
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{
-      width:48px;height:48px;border-radius:10px;display:grid;place-items:center;
-      background:linear-gradient(135deg,#fff,#F0FFF4);
-      box-shadow:var(--shadow);
-      font-weight:700;color:var(--accent);font-size:18px;
-    }
-    .brand h1{font-size:16px;margin:0}
-    nav ul{display:flex;gap:12px;list-style:none;margin:0;padding:0}
-    nav li{padding:8px 12px;border-radius:10px}
-    nav li a{font-weight:600;color:#333}
-    nav li a:hover{background:var(--glass)}
-    .cta{
-      background:var(--accent);color:white;padding:10px 16px;border-radius:12px;font-weight:700;
-      box-shadow:0 6px 20px rgba(46,139,87,0.18);
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writing Eco — 나의 환경 기록 일기</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><circle cx='32' cy='32' r='30' fill='%23e8f7e9' /><text x='50%' y='54%' font-size='26' text-anchor='middle' fill='%236bbf72' font-family='Arial'>❄️</text></svg>">
 
-    /* Hero */
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;padding:44px 0;}
-    .hero-left h2{font-size:34px;margin:0 0 12px}
-    .hero-left p{color:var(--muted);margin:0 0 18px;font-size:16px}
-    .hero-actions{display:flex;gap:12px}
-    .search{
-      display:flex;gap:8px;padding:10px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);align-items:center;
-    }
-    .search input{border:0;outline:none;font-size:14px;width:240px;padding:6px}
-    .hero-right{
-      background:linear-gradient(180deg,#fff,#F7FFF9);
-      border-radius:16px;padding:18px;box-shadow:var(--shadow);
-    }
-    .showcase{
-      display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
-    }
-    .showcase .chip{background:#F5FFF7;border-radius:10px;padding:10px;font-weight:700;font-size:13px;color:var(--accent)}
-    /* Sections */
-    section{padding:56px 0}
-    h3.section-title{font-size:22px;margin:0 0 18px}
-    .lead{color:var(--muted);margin-bottom:18px}
+<style>
+/* =========================
+   Palette & base styles
+   ========================= */
+:root{
+  --bg: #fbfefb;
+  --card: #ffffff;
+  --muted: #7b8a7b;
+  --accent: #6bbf72;
+  --accent-2: #9fd9a8;
+  --danger: #ff6f6f;
+  --soft: #f0fff2;
+  --glass: rgba(255,255,255,0.7);
+  --shadow: 0 8px 20px rgba(30,40,30,0.06);
+  --radius: 14px;
+  --max-width: 1100px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Helvetica Neue", Arial;
+}
 
-    /* Gallery */
-    .gallery-grid{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;
-    }
-    .card{background:var(--card);border-radius:14px;padding:12px;box-shadow:var(--shadow);overflow:hidden;}
-    .card img{width:100%;height:180px;object-fit:cover;border-radius:10px}
-    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-    .tags{display:flex;gap:8px;flex-wrap:wrap}
-    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:#F3F6F4;color:#2B7A55}
-    .btn{display:inline-block;padding:8px 12px;border-radius:10px;background:#EFEFEF;font-weight:700}
+*{box-sizing:border-box}
+html,body{height:100%;background:var(--bg);font-family:var(--font-sans);color:#243022;margin:0}
+a{color:inherit}
+.container{max-width:var(--max-width);margin:0 auto;padding:36px 20px}
 
-    /* Tutorial */
-    .tutorials{display:grid;grid-template-columns:2fr 1fr;gap:18px;align-items:start}
-    .tutorial-card{display:flex;gap:12px;align-items:flex-start}
-    .tutorial-card img{width:120px;height:80px;object-fit:cover;border-radius:10px}
+/* header */
+.header{
+  background: linear-gradient(180deg, rgba(107,191,114,0.12), rgba(159,217,168,0.06));
+  padding:48px 20px;
+  border-radius:0 0 26px 26px;
+  box-shadow:var(--shadow);
+}
+.header-inner{display:flex;gap:20px;align-items:center;justify-content:space-between;max-width:var(--max-width);margin:0 auto}
+.brand{
+  display:flex;gap:16px;align-items:center;
+}
+.logo-wrap{width:78px;height:78px;flex:0 0 78px;border-radius:18px;background:linear-gradient(135deg,#eafaf0,#f7fff7);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(27,52,31,0.06)}
+.logo-mark{width:56px;height:56px}
+.title{font-size:20px;font-weight:800;color:var(--accent)}
+.subtitle{font-size:13px;color:var(--muted);margin-top:4px}
 
-    /* Material library */
-    .material-list{display:flex;gap:12px;flex-wrap:wrap}
-    .material-item{background:linear-gradient(180deg,#fff,#FBFFF9);padding:12px;border-radius:12px;min-width:160px;box-shadow:var(--shadow)}
+/* top actions */
+.top-actions{display:flex;gap:12px;align-items:center}
+.btn{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 6px 12px rgba(107,191,114,0.12)}
+.btn.secondary{background:#ffffff;color:var(--accent);border:1px solid #e6efe6}
+.small-muted{font-size:12px;color:var(--muted)}
 
-    /* Upload & community */
-    .upload-box{background:linear-gradient(180deg,#fff,#FEFFFB);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
-    input[type=file]{display:block}
-    .u-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:10px}
+/* sections */
+.section{padding:48px 20px}
+.section h2{color:var(--accent);margin:0 0 8px 0;font-size:20px}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-top:16px}
 
-    /* Collaboration */
-    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+/* calendar grid */
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:12px;
+  margin-top:18px;
+}
+.cal-day{
+  min-height:90px;padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#fcfff8);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;border:1px solid rgba(30,40,30,0.04);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.cal-day:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(28,44,23,0.08)}
+.cal-day .date{font-weight:800;color:#38563a}
+.cal-day .dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.dot{width:12px;height:12px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.07);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:white}
 
-    /* Footer */
-    footer{padding:28px 0;color:var(--muted);font-size:14px;border-top:1px solid rgba(0,0,0,0.04);background:transparent}
-    .ownership{font-size:13px;color:#666;margin-top:8px}
+/* color coding: we'll compute translucent backgrounds inline via JS */
+.score-bar{height:8px;border-radius:8px;margin-top:10px;background:linear-gradient(90deg,#f4f6f4,#eefaf0)}
 
-    /* Modal */
-    .modal{
-      position:fixed;inset:0;background:rgba(10,10,10,0.5);display:none;align-items:center;justify-content:center;
-      z-index:120;padding:20px;
-    }
-    .modal .modal-card{background:white;border-radius:12px;max-width:900px;width:100%;padding:18px;box-shadow:0 20px 60px rgba(10,10,10,0.35)}
-    .modal img{width:100%;height:380px;object-fit:cover;border-radius:10px}
+/* today highlight */
+.is-today{outline:3px solid rgba(107,191,114,0.2);}
 
-    /* Responsive tweaks */
-    @media (max-width:980px){
-      .hero{grid-template-columns:1fr; padding-bottom:12px}
-      .hero-right{order:2}
-      .hero-left{order:1}
-      .tutorials{grid-template-columns:1fr}
-    }
-  </style>
+/* modal */
+.modal{
+  position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(10,12,8,0.34),rgba(10,12,8,0.26));
+  z-index:80;padding:20px;
+}
+.modal.open{display:flex}
+.modal-card{width:100%;max-width:520px;background:var(--card);border-radius:16px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,0.25)}
+
+/* form list */
+.actions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.action-item{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;background:var(--soft);border:1px solid rgba(100,130,100,0.06)}
+.action-item input{accent-color:var(--accent)}
+.action-label{font-size:14px;color:#35573a;font-weight:700}
+
+/* emotion */
+.emotion-row{display:flex;gap:10px;margin-top:12px;align-items:center}
+.emotion{padding:8px;border-radius:10px;background:#fff;border:1px solid #f0f0f0;cursor:pointer;display:flex;align-items:center;gap:8px}
+.emotion.selected{box-shadow:inset 0 -6px 0 rgba(107,191,114,0.08)}
+
+/* footer / stats */
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.stat{flex:1;min-width:160px;background:linear-gradient(180deg,#fbfff9,#f1fbf0);padding:12px;border-radius:12px;text-align:center}
+
+/* background scene (top) */
+.scene{
+  position:fixed;right:20px;top:120px;width:360px;height:240px;border-radius:18px;padding:12px;background:linear-gradient(180deg,#eaf9ed,#f6fff9);box-shadow:var(--shadow);z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.scene .weather{font-weight:800;color:var(--accent);margin-bottom:6px}
+.scene .desc{color:var(--muted);font-size:13px}
+
+/* responsive */
+@media(max-width:900px){
+  .header-inner{flex-direction:column;gap:14px;align-items:flex-start}
+  .scene{display:none}
+}
+</style>
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">
-          <!-- small polar bear hugging globe abstract -->
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" stroke="#2E8B57" stroke-width="1.2" fill="#E8FFF0"/>
-            <path d="M8 14c1-2 5-2 6 0" stroke="#2E8B57" stroke-linecap="round" stroke-width="1.2"/>
-          </svg>
-        </div>
-        <div>
-          <h1>RE:MAKE SPACE</h1>
-          <div style="font-size:12px;color:var(--muted)">폐기물 → 작품 / 업사이클링 큐레이션</div>
-        </div>
+
+<!-- =============== Header =============== -->
+<header class="header" id="top">
+  <div class="header-inner container">
+    <div class="brand">
+      <div class="logo-wrap" aria-hidden="true">
+        <!-- simple polar-bear holding globe SVG (symbolic) -->
+        <svg class="logo-mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="polar bear holding globe">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1">
+              <stop offset="0" stop-color="#dff6e9"/>
+              <stop offset="1" stop-color="#e8fbef"/>
+            </linearGradient>
+          </defs>
+          <rect rx="20" width="120" height="120" fill="url(#g1)"/>
+          <!-- simple cute icon -->
+          <g transform="translate(12,12)" fill="#3b6246">
+            <circle cx="46" cy="36" r="18" fill="#ffffff" />
+            <circle cx="54" cy="28" r="8" fill="#e1f7e7"/>
+            <path d="M36 58c12 12 30 12 42 0" stroke="#c9e8cf" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="46" cy="36" r="3" fill="#3b6246"/>
+            <circle cx="52" cy="34" r="2.2" fill="#3b6246"/>
+          </g>
+        </svg>
       </div>
-
-      <nav>
-        <ul>
-          <li><a href="#gallery">갤러리</a></li>
-          <li><a href="#tutorials">튜토리얼</a></li>
-          <li><a href="#materials">재료도감</a></li>
-          <li><a href="#community">커뮤니티</a></li>
-          <li><a href="#collab">협업</a></li>
-        </ul>
-      </nav>
-
-      <div style="display:flex;gap:10px;align-items:center">
-        <a class="cta" href="#upload">작품 업로드</a>
+      <div>
+        <div class="title">Writing Eco</div>
+        <div class="subtitle">“나의 환경 기록 일기” — 내 작은 기록이 지구를 지킴</div>
       </div>
     </div>
-  </header>
 
-  <main class="container" role="main">
-    <!-- HERO -->
-    <section class="hero" id="home" aria-label="홈">
-      <div class="hero-left">
-        <h2>쓰레기를 디자인으로 다시 불러오기</h2>
-        <p>패션·뷰티 쓰레기(폐의류, 용기, 라벨 등)를 예술적 자원으로 전환하는 큐레이션 플랫폼. 전시, 튜토리얼, 협업으로 창작 생태계를 만듭니다.</p>
-        <div class="hero-actions">
-          <div class="search" role="search" aria-label="검색">
-            <svg width="18" height="18" viewBox="0 0 24 24" style="opacity:.7"><path d="M21 21l-4.35-4.35" stroke="#333" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="11" cy="11" r="6" stroke="#333" stroke-width="1.6" fill="none"/></svg>
-            <input placeholder="작품, 재료, 튜토리얼 검색..." id="siteSearch" />
-            <button class="btn" onclick="searchSite()">검색</button>
-          </div>
-          <a class="btn" href="#gallery">갤러리 보기</a>
-        </div>
-
-        <div style="margin-top:18px;display:flex;gap:10px">
-          <div class="chip">환경영향 가시화</div>
-          <div class="chip">디자이너·학생 협업</div>
-          <div class="chip">커뮤니티 참여</div>
-        </div>
-      </div>
-
-      <aside class="hero-right" aria-hidden="false">
-        <strong>오늘의 추천 작품</strong>
-        <div style="height:12px"></div>
-        <div class="showcase">
-          <div class="card" style="padding:10px">
-            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='%23F5FFF7'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='22'>업사이클 백 — 데모</text></svg>" alt="업사이클 백">
-            <div style="margin-top:8px;font-weight:800">Patchwork UpBag</div>
-            <div style="color:var(--muted);font-size:13px">재료: 폐셔츠, 지퍼, 스티커</div>
-          </div>
-
-          <div class="card" style="padding:10px">
-            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='%23FFF8F0'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23B86B3A' font-size='20'>뷰티용기 조명</text></svg>" alt="뷰티 용기 조명">
-            <div style="margin-top:8px;font-weight:800">Glow Jar Lamp</div>
-            <div style="color:var(--muted);font-size:13px">재료: 화장품 용기, LED, 에폭시</div>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <!-- Gallery -->
-    <section id="gallery" aria-label="갤러리">
-      <h3 class="section-title">작품 갤러리</h3>
-      <div class="lead">전세계 업사이클링 디자인 사례와 사용자 창작물이 모이는 전시 공간. 클릭하면 상세와 제작과정을 확인할 수 있습니다.</div>
-
-      <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center">
-        <label style="font-weight:700">필터:</label>
-        <select id="filterTag" onchange="filterGallery()">
-          <option value="">전체</option>
-          <option value="섬유">섬유</option>
-          <option value="플라스틱">플라스틱</option>
-          <option value="라벨">라벨·스티커</option>
-          <option value="유리">유리</option>
-        </select>
-        <div style="margin-left:auto;color:var(--muted);font-size:13px">작품 수: <span id="countBadge">0</span></div>
-      </div>
-
-      <div class="gallery-grid" id="galleryGrid" aria-live="polite"></div>
-    </section>
-
-    <!-- Tutorials -->
-    <section id="tutorials" aria-label="튜토리얼">
-      <h3 class="section-title">업사이클링 튜토리얼</h3>
-      <div class="lead">초보자도 따라할 수 있는 단계별 가이드와 재료 추천. 영상과 이미지 중심으로 구성되어 있습니다.</div>
-
-      <div class="tutorials">
-        <div>
-          <div class="tutorial-card card">
-            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='100%' height='100%' fill='%23FFF8F0'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23B86B3A' font-size='18'>오래된 티셔츠 가방</text></svg>" alt="">
-            <div>
-              <div style="font-weight:800">티셔츠로 만드는 토트백</div>
-              <div style="color:var(--muted);font-size:13px">난이도: ★★☆☆☆ · 시간: 40분</div>
-              <p style="margin:8px 0;color:var(--muted)">간단한 바느질로 오래된 티셔츠를 멋진 에코백으로 변신시켜요. 패션 쓰레기 감소에 직접 기여합니다.</p>
-              <a class="btn" href="#upload" onclick="document.getElementById('uploadForm').scrollIntoView({behavior:'smooth'})">튜토리얼 보기</a>
-            </div>
-          </div>
-
-          <div class="tutorial-card card" style="margin-top:12px">
-            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='100%' height='100%' fill='%23F5FFF7'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='18'>용기 재활용 조명</text></svg>" alt="">
-            <div>
-              <div style="font-weight:800">뷰티 용기 조명 만들기</div>
-              <div style="color:var(--muted);font-size:13px">난이도: ★★★☆☆ · 시간: 90분</div>
-              <p style="margin:8px 0;color:var(--muted)">투명 용기를 이용한 무드등 제작. 간단한 전기 지식이 필요합니다.</p>
-              <a class="btn" href="#materials">재료 확인</a>
-            </div>
-          </div>
-        </div>
-
-        <aside class="card" style="height:100%">
-          <h4 style="margin:0 0 8px">재료 추천</h4>
-          <div style="color:var(--muted);font-size:13px;margin-bottom:8px">어떤 재료가 업사이클링에 적합한지 빠르게 확인하세요.</div>
-          <div class="material-list" id="materialList">
-            <!-- items populated by JS -->
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- Materials -->
-    <section id="materials" aria-label="재료도감">
-      <h3 class="section-title">재료 도감 (Material Library)</h3>
-      <div class="lead">재료별 특성·가공법·주의사항을 정리한 도감. 프로젝트에 맞는 재료를 빠르게 찾을 수 있습니다.</div>
-
-      <div id="materialCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px"></div>
-    </section>
-
-    <!-- Community / Upload -->
-    <section id="community" aria-label="커뮤니티">
-      <h3 class="section-title">커뮤니티 · 작품 업로드</h3>
-      <div class="lead">나의 업사이클링 작품을 업로드하고 피드백을 받아보세요. 권장 형식: 사진 1~5장, 재료 태그, 제작 과정 설명.</div>
-
-      <div class="upload-box card" id="upload">
-        <form id="uploadForm" onsubmit="submitUpload(event)">
-          <div style="display:flex;gap:12px;flex-direction:column">
-            <label>제목</label>
-            <input id="uTitle" required placeholder="작품 제목" />
-
-            <label>설명</label>
-            <textarea id="uDesc" rows="3" placeholder="제작 과정, 사용 재료, 환경적 효과를 적어주세요"></textarea>
-
-            <label>태그 (콤마로 구분)</label>
-            <input id="uTags" placeholder="섬유,플라스틱,라벨" />
-
-            <label>사진 업로드 (최대 5장)</label>
-            <input id="uFiles" type="file" accept="image/*" multiple onchange="previewFiles()" />
-
-            <div class="u-preview" id="uPreview"></div>
-
-            <div style="display:flex;gap:8px;align-items:center">
-              <button class="btn" type="submit">업로드</button>
-              <div style="color:var(--muted);font-size:13px">* 업로드된 작품은 큐레이션 후 공개됩니다.</div>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <div style="margin-top:18px" id="communityFeed"></div>
-    </section>
-
-    <!-- Collaboration -->
-    <section id="collab" aria-label="협업">
-      <h3 class="section-title">디자이너 · 학생 협업</h3>
-      <div class="lead">팀빌딩, 프로젝트 제안, 재료 제공자 연결까지. 학교 수업용 프로젝트나 전시 협업을 신청하세요.</div>
-
-      <div class="projects" id="projectCards">
-        <!-- populated by JS -->
-      </div>
-    </section>
-
-    <!-- Environment Impact -->
-    <section id="impact" aria-label="환경영향">
-      <h3 class="section-title">환경 영향 가시화</h3>
-      <div class="lead">각 작품이 절감한 폐기물 무게와 대략적 CO₂ 절감 효과를 계산해 보여줍니다 (예시 데이터 기반).</div>
-
-      <div style="display:flex;gap:18px;flex-wrap:wrap">
-        <div class="card" style="flex:1;min-width:220px">
-          <h4 style="margin:0 0 8px">총 절감량 (예시)</h4>
-          <div style="font-size:28px;font-weight:800" id="totalWaste">0 g</div>
-          <div style="color:var(--muted);font-size:13px">누적 업사이클링으로 절감된 폐기물 무게</div>
-        </div>
-
-        <div class="card" style="flex:2;min-width:320px;padding:18px">
-          <h4 style="margin-top:0">작품별 영향</h4>
-          <div id="impactList"></div>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-        <div>
-          <strong>RE:MAKE SPACE</strong><br/>
-          <div class="ownership">지적 소유권은 해당 사이트 창립자에게 있습니다. © RE:MAKE SPACE</div>
-        </div>
-        <div style="color:var(--muted)">문의: info@remakespace.local (데모용)</div>
-      </div>
-    </footer>
-
-  </main>
-
-  <!-- Modal for gallery detail -->
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal-card">
-      <button style="float:right" onclick="closeModal()">닫기 ✕</button>
-      <div id="modalContent"></div>
+    <div class="top-actions">
+      <div class="small-muted">오늘의 상태를 기록하고 지구 색을 바꿔보세요</div>
+      <button class="btn" id="quick-record-btn">오늘 기록하기</button>
     </div>
   </div>
+</header>
 
-  <script>
-    /*****************
-     * Sample Data
-     *****************/
-    const SAMPLE = [
-      {
-        id:"p1", title:"Patchwork UpBag", desc:"여러 오래된 티셔츠 조각을 패치워크해 만든 토트백.", tags:["섬유"], imgs:[], rawWaste:250
-      },
-      {
-        id:"p2", title:"Glow Jar Lamp", desc:"화장품 용기를 모아 만든 무드등.", tags:["플라스틱","유리"], imgs:[], rawWaste:120
-      },
-      {
-        id:"p3", title:"Sticker Collage Wallet", desc:"상품 라벨과 스티커를 코팅해 만든 미니 월렛.", tags:["라벨"], imgs:[], rawWaste:40
-      },
-      {
-        id:"p4", title:"Denim Repair Jacket", desc:"데님 파편을 조합한 재활용 재킷.", tags:["섬유"], imgs:[], rawWaste:800
-      }
-    ];
+<!-- =============== Scene (weather/aq) =============== -->
+<div class="scene" id="scene">
+  <div class="weather" id="scene-main">로딩 중…</div>
+  <div class="desc" id="scene-sub">현재 기후 데이터를 불러오고 있습니다.</div>
+  <div style="height:8px"></div>
+  <div style="font-size:12px;color:#7b8a7b">위치 권한 허용 시 더 정확한 정보를 보여줍니다</div>
+</div>
 
-    // populate initial UI
-    const galleryGrid = document.getElementById('galleryGrid');
-    const materialListEl = document.getElementById('materialList');
-    const materialCards = document.getElementById('materialCards');
-    const projectCards = document.getElementById('projectCards');
-    const communityFeed = document.getElementById('communityFeed');
-    const countBadge = document.getElementById('countBadge');
+<main class="container">
+  <!-- =============== Calendar Section =============== -->
+  <section class="section" id="cal-section">
+    <h2>📅 오늘의 환경 기록 달력</h2>
+    <p class="small-muted">텀블러 사용, 일회용품 미사용, 분리수거 등 다양한 행동을 선택해 한 달 단위로 기록하세요. 좋은 행동은 초록, 나쁜 행동은 빨강으로 시각화됩니다.</p>
 
-    let galleryData = [...SAMPLE];
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <strong id="month-title" style="font-size:16px"></strong>
+          <div class="small-muted" id="sub-month"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn secondary" id="prev-month">◀ 이전</button>
+          <button class="btn secondary" id="next-month">다음 ▶</button>
+        </div>
+      </div>
 
-    function renderGallery(data){
-      galleryGrid.innerHTML = '';
-      data.forEach(item=>{
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='400'><rect width='100%' height='100%' fill='%23FFFDF8'/><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='20'>${escapeHtml(item.title)}</text></svg>" alt="${escapeHtml(item.title)}" />
-          <div style="margin-top:8px;font-weight:800">${escapeHtml(item.title)}</div>
-          <div style="color:var(--muted);font-size:13px">${escapeHtml(item.desc)}</div>
-          <div class="meta">
-            <div class="tags">${item.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-            <div><button class="btn" onclick="openDetail('${item.id}')">보기</button></div>
-          </div>
-        `;
-        galleryGrid.appendChild(card);
-      });
-      countBadge.textContent = data.length;
+      <div class="calendar-grid" id="calendar-grid" aria-live="polite" style="margin-top:18px"></div>
+
+      <div class="stats">
+        <div class="stat">
+          <div style="font-size:18px;font-weight:800" id="month-score">0%</div>
+          <div class="small-muted">이번 달 환경 점수</div>
+        </div>
+        <div class="stat">
+          <div style="font-size:18px;font-weight:800" id="streak">0일</div>
+          <div class="small-muted">연속 실천 일수</div>
+        </div>
+        <div class="stat">
+          <div style="font-size:18px;font-weight:800" id="green-days">0</div>
+          <div class="small-muted">초록일 수</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== Info / How it works =============== -->
+  <section class="section">
+    <h2>✨ 어떻게 작동하나요?</h2>
+    <div class="card">
+      <ol style="padding-left:18px">
+        <li>달력에서 오늘(또는 날짜)을 클릭 → '오늘의 행동'을 선택하세요.</li>
+        <li>좋은 행동은 초록으로, 나쁜 행동은 빨강으로 표시됩니다. 언제든 수정 가능.</li>
+        <li>위치 권한을 허용하면 현재 날씨/미세먼지 상태가 자동 반영되어 배경이 바뀝니다(선택 사항).</li>
+        <li>모든 기록은 브라우저에 저장되어 재방문 시 유지됩니다.</li>
+      </ol>
+      <p class="small-muted" style="margin-top:12px">리포트나 발표용으로 사용 시 '내보내기' 기능을 추가해 데이터를 CSV로 만들 수 있습니다 (확장 가능).</p>
+    </div>
+  </section>
+
+  <!-- =============== Footer / Credits =============== -->
+  <section class="section" style="padding-bottom:120px">
+    <div style="display:flex;gap:12px;flex-direction:column">
+      <div class="card">
+        <strong>디자인 노트</strong>
+        <p class="small-muted" style="margin-top:8px">파스텔톤, 부드러운 곡선, 애니메이션을 통해 사용자가 '기분 좋게' 지속할 수 있도록 유도합니다. 미술 전공의 시각적 설계(일러스트, 윤곽, 색채)가 핵심입니다.</p>
+      </div>
+
+      <div class="card">
+        <strong>로고 설명</strong>
+        <p class="small-muted" style="margin-top:8px">귀여운 북극곰(상징)이 지구를 안고 있는 심볼을 메인 아이덴티티로 사용했습니다. 친근한 메시지로 지속 실천을 권장합니다.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- =============== Modal (record) =============== -->
+<div class="modal" id="record-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-card" role="document">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h3 id="modal-date">날짜</h3>
+        <div class="small-muted" id="modal-sub">기록 내용을 선택하세요</div>
+      </div>
+      <div>
+        <button class="btn secondary" id="delete-day">삭제</button>
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div style="font-weight:700;margin-bottom:6px">오늘의 행동 (여러 개 선택 가능)</div>
+      <div class="actions-grid" id="actions-grid">
+        <!-- action items injected by JS -->
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div style="font-weight:700;margin-bottom:6px">오늘 느낌 선택</div>
+      <div class="emotion-row" id="emotion-row">
+        <!-- emotion buttons -->
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div style="font-weight:700;margin-bottom:6px">메모 (선택)</div>
+      <textarea id="memo" rows="3" style="width:100%;padding:10px;border-radius:10px;border:1px solid #e6efe6"></textarea>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:14px;justify-content:flex-end">
+      <button id="close-modal" class="btn secondary">취소</button>
+      <button id="save-entry" class="btn">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   Data & Action Definitions
+   ========================= */
+
+/*
+  actions: 각 행동은 'score'를 가집니다.
+  score: +1 ~ +3 (환경에 좋은 행동), -1 ~ -3 (나쁜 행동)
+  decompositionYears: 플라스틱 등 나쁜 아이템에 대한 분해 기간 (표시용)
+*/
+const ACTIONS = [
+  { id: 'tumbler', label: '텀블러 사용', score: 2, icon:'♻️' },
+  { id: 'public-transport', label: '대중교통 이용', score: 2, icon:'🚌' },
+  { id: 'recycle', label: '분리수거 철저', score: 1, icon:'🔄' },
+  { id: 'upcycle', label: '업사이클링/재활용 제작', score: 2, icon:'✂️' },
+  { id: 'meatless', label: '채식 위주 식사', score: 1, icon:'🥗' },
+  { id: 'no-single', label: '일회용품 미사용', score: 3, icon:'🌿' },
+
+  { id: 'straw', label: '플라스틱 빨대 사용', score: -2, icon:'🧋', decomposition: 200 },
+  { id: 'single-cup', label: '일회용 컵 사용', score: -2, icon:'☕', decomposition: 450 },
+  { id: 'plastic-bag', label: '비닐봉지 사용', score: -1, icon:'🛍️', decomposition: 100 },
+  { id: 'litter', label: '길거리 쓰레기 투기', score: -3, icon:'🚯', decomposition: 500 }
+];
+
+const EMOTIONS = [
+  { id:'happy', label:'기쁨', emoji:'😊' },
+  { id:'ok', label:'괜찮음', emoji:'🙂' },
+  { id:'tired', label:'피곤', emoji:'😴' },
+  { id:'sad', label:'우울', emoji:'😔' },
+  { id:'proud', label:'뿌듯', emoji:'😌' }
+];
+
+/* =========================
+   Utilities: date helpers
+   ========================= */
+function pad(n){return n<10? '0'+n : ''+n}
+function dateKey(y,m,d){ return `${y}-${pad(m)}-${pad(d)}` }
+function monthTitle(year, month){
+  const dt = new Date(year, month-1, 1);
+  return dt.toLocaleString('ko-KR',{month:'long', year:'numeric'});
+}
+
+/* =========================
+   Storage & State
+   ========================= */
+const STORAGE_KEY = 'writing-eco-entries-v1';
+let entries = {}; // { '2025-11-07': {actions:[], emotion:'', memo:'' } }
+function loadEntries(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) entries = JSON.parse(raw);
+  }catch(e){ entries = {}; console.error('loadEntries',e) }
+}
+function saveEntries(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }catch(e){ console.error('saveEntries',e) }
+}
+
+/* =========================
+   Calendar state
+   ========================= */
+let viewYear, viewMonth; // year, month(1-12)
+const today = new Date();
+viewYear = today.getFullYear();
+viewMonth = today.getMonth() + 1;
+
+/* =========================
+   DOM Refs
+   ========================= */
+const calendarGrid = document.getElementById('calendar-grid');
+const monthTitleEl = document.getElementById('month-title');
+const subMonthEl = document.getElementById('sub-month');
+const monthScoreEl = document.getElementById('month-score');
+const streakEl = document.getElementById('streak');
+const greenDaysEl = document.getElementById('green-days');
+
+const recordModal = document.getElementById('record-modal');
+const modalDate = document.getElementById('modal-date');
+const modalSub = document.getElementById('modal-sub');
+const actionsGrid = document.getElementById('actions-grid');
+const emotionRow = document.getElementById('emotion-row');
+const memoEl = document.getElementById('memo');
+const saveEntryBtn = document.getElementById('save-entry');
+const closeModalBtn = document.getElementById('close-modal');
+const deleteDayBtn = document.getElementById('delete-day');
+const quickRecordBtn = document.getElementById('quick-record-btn');
+
+loadEntries();
+
+/* =========================
+   Render helpers
+   ========================= */
+function clearChildren(el){ while(el.firstChild) el.removeChild(el.firstChild) }
+
+/* compute days in month */
+function daysInMonth(y,m){ return new Date(y,m,0).getDate() }
+
+/* compute entry score */
+function computeScoreForDate(key){
+  const e = entries[key];
+  if(!e || !e.actions) return 0;
+  return e.actions.reduce((s,a)=>{
+    const act = ACTIONS.find(x=>x.id===a);
+    return s + (act?act.score:0);
+  },0);
+}
+
+function computeMonthStats(y,m){
+  const days = daysInMonth(y,m);
+  let totalScore = 0, goodDays=0, streak=0, maxStreak=0, curStreak=0;
+  for(let d=1; d<=days; d++){
+    const key = dateKey(y,m,d);
+    const s = computeScoreForDate(key);
+    totalScore += s;
+    if(s>0) { goodDays++ ; curStreak++; maxStreak = Math.max(maxStreak, curStreak) }
+    else { curStreak =0 }
+  }
+  const possible = days * 3; // rough scale
+  const percent = Math.max(0, Math.round((totalScore + days*1.5) / (days*3) * 100)); // normalized
+  return { percent, goodDays, maxStreak };
+}
+
+/* generate calendar */
+function renderCalendar(y,m){
+  clearChildren(calendarGrid);
+  monthTitleEl.textContent = monthTitle(y,m);
+  subMonthEl.textContent = `${y}년 ${m}월`
+
+  const firstDay = new Date(y, m-1, 1).getDay(); // 0-6 (Sun-Sat)
+  const days = daysInMonth(y,m);
+
+  // Fill leading blanks (Sunday-first layout)
+  const blanks = firstDay; // number of empty slots
+  for(let i=0;i<blanks;i++){
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    el.style.visibility = 'hidden';
+    calendarGrid.appendChild(el);
+  }
+
+  for(let d=1; d<=days; d++){
+    const key = dateKey(y,m,d);
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    el.setAttribute('data-date', key);
+
+    // date header
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'date';
+    dateDiv.textContent = d + '일';
+    el.appendChild(dateDiv);
+
+    // small icons / dots
+    const dots = document.createElement('div');
+    dots.className = 'dots';
+    const e = entries[key];
+    if(e && e.actions && e.actions.length>0){
+      e.actions.slice(0,6).forEach(aid=>{
+        const act = ACTIONS.find(x=>x.id===aid);
+        const dot = document.createElement('div');
+        dot.className='dot';
+        // color by score
+        if(act.score>0) dot.style.background = 'linear-gradient(180deg,#7ee08a,#3cae57)';
+        else dot.style.background = 'linear-gradient(180deg,#ff9b9b,#ff6f6f)';
+        dot.title = act?act.label:'';
+        dot.textContent = act?act.icon:'•';
+        dots.appendChild(dot);
+      })
+    } else {
+      const hint = document.createElement('div');
+      hint.className = 'small-muted';
+      hint.style.fontSize='12px';
+      hint.textContent = '아직 기록 없음';
+      dots.appendChild(hint);
+    }
+    el.appendChild(dots);
+
+    // score bar (visual subtle)
+    const score = computeScoreForDate(key);
+    const bar = document.createElement('div');
+    bar.className = 'score-bar';
+    // compute color by score (-3..+6 roughly)
+    const color = scoreColor(score);
+    bar.style.background = `linear-gradient(90deg, ${color} 0%, rgba(255,255,255,0) 100%)`;
+    el.appendChild(bar);
+
+    // highlight today
+    if(y===today.getFullYear() && m===today.getMonth()+1 && d===today.getDate()){
+      el.classList.add('is-today');
     }
 
-    function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+    // click handler
+    el.addEventListener('click', ()=> openRecordModal(key));
+    calendarGrid.appendChild(el);
+  }
 
-    function openDetail(id){
-      const item = galleryData.find(d=>d.id===id);
-      if(!item) return;
-      const modal = document.getElementById('modal');
-      document.getElementById('modalContent').innerHTML = `
-        <h2>${escapeHtml(item.title)}</h2>
-        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='600'><rect width='100%' height='100%' fill='%23F6FFF8'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='34'>${escapeHtml(item.title)}</text></svg>" alt="${escapeHtml(item.title)}" />
-        <p style="color:var(--muted)">${escapeHtml(item.desc)}</p>
-        <p style="font-weight:700">재료: ${item.tags.join(', ')}</p>
-        <p style="color:var(--muted)">추정 절감 폐기물: ${item.rawWaste} g</p>
-      `;
-      modal.style.display='flex';
-      modal.setAttribute('aria-hidden','false');
+  // update stats
+  const stats = computeMonthStats(y,m);
+  monthScoreEl.textContent = `${stats.percent}%`;
+  greenDaysEl.textContent = stats.goodDays;
+  streakEl.textContent = `${stats.maxStreak}일`;
+
+}
+
+/* helper: map score to color */
+function scoreColor(score){
+  // score range approx [-3 .. +6]
+  if(score<=-2) return 'rgba(255,111,111,0.95)'; // bad
+  if(score<0) return 'rgba(255,160,160,0.9)';
+  if(score===0) return 'rgba(230,230,230,0.35)';
+  if(score<=2) return 'rgba(150,220,160,0.85)';
+  return 'rgba(80,180,120,0.95)';
+}
+
+/* =========================
+   Modal: build content and interaction
+   ========================= */
+
+let currentEditingKey = null;
+
+function openRecordModal(key){
+  currentEditingKey = key;
+  const d = new Date(key);
+  modalDate.textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+  modalSub.textContent = '오늘 한 행동을 선택하고 저장하세요';
+
+  // populate actions
+  clearChildren(actionsGrid);
+  ACTIONS.forEach(act=>{
+    const id = 'act-'+act.id;
+    const wrap = document.createElement('label');
+    wrap.className = 'action-item';
+    wrap.innerHTML = `<input type="checkbox" id="${id}" data-aid="${act.id}"> <div class="action-label">${act.icon} ${act.label}</div>`;
+    actionsGrid.appendChild(wrap);
+  });
+
+  // populate emotion buttons
+  clearChildren(emotionRow);
+  EMOTIONS.forEach(em=>{
+    const b = document.createElement('div');
+    b.className = 'emotion';
+    b.setAttribute('data-em', em.id);
+    b.innerHTML = `<div style="font-size:18px">${em.emoji}</div><div style="font-size:13px">${em.label}</div>`;
+    b.addEventListener('click', ()=> {
+      Array.from(emotionRow.children).forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+    emotionRow.appendChild(b);
+  });
+
+  // load existing
+  const entry = entries[key];
+  if(entry){
+    // check actions
+    entry.actions.forEach(aid=>{
+      const c = document.querySelector(`#act-${aid}`);
+      if(c) c.checked = true;
+    });
+    // emotion
+    if(entry.emotion){
+      const btn = emotionRow.querySelector(`[data-em="${entry.emotion}"]`);
+      if(btn) btn.classList.add('selected');
     }
-    function closeModal(){
-      const modal = document.getElementById('modal');
-      modal.style.display='none';
-      modal.setAttribute('aria-hidden','true');
-    }
+    memoEl.value = entry.memo || '';
+  } else {
+    memoEl.value = '';
+  }
 
-    // filter gallery
-    function filterGallery(){
-      const f = document.getElementById('filterTag').value;
-      if(!f) renderGallery(galleryData);
-      else renderGallery(galleryData.filter(it=>it.tags.includes(f)));
-    }
+  // show decomposition hint if any bad actions present
+  toggleDeleteButton(!!entry);
 
-    // populate materials
-    const MATERIALS = [
-      {name:"면(코튼) - 폐셔츠", use:"바느질, 패치워크, 가방", note:"세탁 후 사용 권장"},
-      {name:"데님", use:"브랜드 보수/패치", note:"두꺼워 재단 시 공구 필요"},
-      {name:"PET 플라스틱 용기", use:"조명, 투명 아트", note:"라벨 제거 필요"},
-      {name:"화장품 라벨/스티커", use:"콜라주, 코팅 소품", note:"방수 코팅으로 가공 가능"},
-      {name:"유리병", use:"조명, 화분", note:"파편 처리 주의"}
-    ];
-    function renderMaterials(){
-      materialListEl.innerHTML='';
-      MATERIALS.forEach(m=>{
-        const el = document.createElement('div');
-        el.className='material-item';
-        el.innerHTML = `<strong>${m.name}</strong><div style="color:var(--muted);font-size:13px">${m.use}</div><div style="font-size:12px;color:#666;margin-top:6px">${m.note}</div>`;
-        materialListEl.appendChild(el);
+  recordModal.classList.add('open');
+  recordModal.setAttribute('aria-hidden','false');
+}
 
-        const card = document.createElement('div');
-        card.className='card';
-        card.innerHTML = `<strong>${m.name}</strong><div style="color:var(--muted);font-size:13px">${m.use}</div><div style="font-size:12px;color:#666;margin-top:6px">${m.note}</div>`;
-        materialCards.appendChild(card);
-      });
-    }
+/* Save logic */
+saveEntryBtn.addEventListener('click', ()=>{
+  if(!currentEditingKey) return;
+  const checked = Array.from(actionsGrid.querySelectorAll('input[type=checkbox]:checked')).map(x=>x.dataset.aid);
+  const emotionBtn = emotionRow.querySelector('.emotion.selected');
+  const emotion = emotionBtn ? emotionBtn.dataset.em : '';
+  const memo = memoEl.value.trim();
 
-    // projects
-    const PROJECTS = [
-      {title:"학교 연계: 업사이클링 워크숍", desc:"디자인과 학생 10명 대상 1일 워크숍", contact:"school@demo"},
-      {title:"브랜드 기부자 연결", desc:"미사용 원단/시제품 기부 협업", contact:"brand@demo"}
-    ];
-    function renderProjects(){
-      projectCards.innerHTML='';
-      PROJECTS.forEach(p=>{
-        const el = document.createElement('div');
-        el.className='card';
-        el.innerHTML = `<div style="font-weight:800">${p.title}</div><div style="color:var(--muted);font-size:13px">${p.desc}</div><div style="margin-top:8px"><a class="btn" href="mailto:${p.contact}">참여 신청</a></div>`;
-        projectCards.appendChild(el);
-      });
-    }
+  if(checked.length===0 && memo===''){
+    // if empty, treat as delete
+    delete entries[currentEditingKey];
+  } else {
+    entries[currentEditingKey] = { actions: checked, emotion, memo, updatedAt: Date.now() };
+  }
+  saveEntries();
+  renderCalendar(viewYear, viewMonth);
+  recordModal.classList.remove('open');
+  recordModal.setAttribute('aria-hidden','true');
+  // after save, if any bad action, show decomposition modal small tooltip
+  const bad = checked.filter(id => {
+    const a = ACTIONS.find(x=>x.id===id);
+    return a && a.score < 0;
+  });
+  if(bad.length>0){
+    setTimeout(()=> showPlasticTimerPopup(bad), 350);
+  }
+});
 
-    // community feed initial
-    function renderCommunity(){
-      communityFeed.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">'+
-        galleryData.map(it=>`<div class="card"><strong>${escapeHtml(it.title)}</strong><div style="color:var(--muted);font-size:13px">${escapeHtml(it.desc)}</div></div>`).join('') +
-        '</div>';
-    }
+/* delete day */
+deleteDayBtn.addEventListener('click', ()=>{
+  if(!currentEditingKey) return;
+  if(entries[currentEditingKey]) delete entries[currentEditingKey];
+  saveEntries();
+  renderCalendar(viewYear, viewMonth);
+  recordModal.classList.remove('open');
+  recordModal.setAttribute('aria-hidden','true');
+});
 
-    // upload handling (client-only demo)
-    function previewFiles(){
-      const files = document.getElementById('uFiles').files;
-      const p = document.getElementById('uPreview');
-      p.innerHTML='';
-      Array.from(files).slice(0,5).forEach(file=>{
-        const fr = new FileReader();
-        const box = document.createElement('div');
-        box.style.borderRadius='8px';
-        box.style.overflow='hidden';
-        box.style.height='80px';
-        box.style.background='#f5f6f5';
-        box.style.display='flex';
-        box.style.alignItems='center';
-        box.style.justifyContent='center';
-        box.style.fontSize='12px';
-        box.style.color='#666';
-        box.textContent = '미리보기 준비중...';
-        p.appendChild(box);
-        fr.onload = e => {
-          box.innerHTML = `<img src="${e.target.result}" style="width:auto;height:80px;display:block" />`
+/* close */
+closeModalBtn.addEventListener('click', ()=>{
+  recordModal.classList.remove('open');
+  recordModal.setAttribute('aria-hidden','true');
+});
+
+/* quick record button opens modal for today */
+quickRecordBtn.addEventListener('click', ()=>{
+  const key = dateKey(today.getFullYear(), today.getMonth()+1, today.getDate());
+  openRecordModal(key);
+});
+
+/* outside click close */
+recordModal.addEventListener('click', (e)=>{
+  if(e.target === recordModal){
+    recordModal.classList.remove('open');
+    recordModal.setAttribute('aria-hidden','true');
+  }
+});
+
+/* =========================
+   Plastic timer popup (small)
+   ========================= */
+function showPlasticTimerPopup(badIds){
+  // compute decomposition years
+  const years = badIds.map(id => {
+    const a = ACTIONS.find(x=>x.id===id);
+    return a.decomposition || null;
+  }).filter(Boolean);
+
+  if(years.length===0) return;
+  const min = Math.min(...years);
+  const max = Math.max(...years);
+
+  alert(`주의: 오늘 기록한 일회용품은 분해되기까지 약 ${min}~${max}년이 걸립니다. 작은 선택이 중요해요.`);
+}
+
+/* =========================
+   Month navigation
+   ========================= */
+document.getElementById('prev-month').addEventListener('click', ()=>{
+  const dt = new Date(viewYear, viewMonth-2, 1);
+  viewYear = dt.getFullYear(); viewMonth = dt.getMonth()+1;
+  renderCalendar(viewYear, viewMonth);
+});
+document.getElementById('next-month').addEventListener('click', ()=>{
+  const dt = new Date(viewYear, viewMonth, 1);
+  viewYear = dt.getFullYear(); viewMonth = dt.getMonth()+1;
+  renderCalendar(viewYear, viewMonth);
+});
+
+/* =========================
+   Weather / AQ Integration (attempt)
+   ========================= */
+const sceneMain = document.getElementById('scene-main');
+const sceneSub = document.getElementById('scene-sub');
+
+async function fetchAndApplyEnvironmentalData(){
+  // Try to get geolocation
+  if(!navigator.geolocation){
+    applySimulatedScene();
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(async (pos)=>{
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+    // Try Open-Meteo for weather
+    try{
+      const wres = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+      const wjson = await wres.json();
+      const cw = wjson.current_weather;
+      // Try OpenAQ for AQ data (may be blocked)
+      let aqiText = '';
+      try{
+        const aqres = await fetch(`https://api.openaq.org/v2/latest?coordinates=${lat},${lon}`);
+        const aqj = await aqres.json();
+        if(aqj && aqj.results && aqj.results.length>0){
+          // approximate display
+          const m = aqj.results[0].measurements && aqj.results[0].measurements[0];
+          if(m){
+            aqiText = `${m.parameter} ${m.value}${m.unit}`;
+          }
         }
-        fr.readAsDataURL(file);
-      });
+      }catch(e){ /* ignore */ }
+
+      // Apply scene changes
+      sceneMain.textContent = `${cw.temperature}℃, 바람 ${Math.round(cw.windspeed)} m/s`;
+      sceneSub.textContent = `현재 하늘: ${cw.weathercode} ${aqiText ? ' | 공기: ' + aqiText : ''}`;
+      applySceneStyle(cw.temperature, aqiText);
+    }catch(e){
+      console.warn('env fetch failed', e);
+      applySimulatedScene();
     }
+  }, (err)=>{
+    console.warn('geolocation denied or failed', err);
+    applySimulatedScene();
+  }, {timeout:7000});
+}
 
-    function submitUpload(e){
-      e.preventDefault();
-      const title = document.getElementById('uTitle').value.trim();
-      const desc = document.getElementById('uDesc').value.trim();
-      const tags = document.getElementById('uTags').value.split(',').map(s=>s.trim()).filter(Boolean);
-      const files = document.getElementById('uFiles').files;
-      // Create a local entry (demo only)
-      const newItem = {
-        id: 'u'+Date.now(),
-        title, desc, tags, imgs:[], rawWaste: estimateWaste(tags, files)
-      };
-      galleryData.unshift(newItem);
-      renderGallery(galleryData);
-      renderCommunity();
-      renderImpact();
-      alert('업로드 완료 (데모): 작품은 큐레이션 후 공개됩니다.');
-      // reset
-      document.getElementById('uploadForm').reset();
-      document.getElementById('uPreview').innerHTML = '';
-    }
+function applySimulatedScene(){
+  // graceful fallback: pick a friendly simulated state
+  sceneMain.textContent = '맑음, 18℃';
+  sceneSub.textContent = '오늘은 맑은 날이에요 — 실천하기 좋은 날입니다.';
+  applySceneStyle(18, '');
+}
 
-    function estimateWaste(tags, files){
-      // rough heuristic: image count * 120g + tag bonus
-      const base = (files ? Math.min(files.length,5) : 1) * 120;
-      const tagBonus = tags.includes('섬유') ? 200 : 0;
-      return base + tagBonus;
-    }
+function applySceneStyle(temp, aqi){
+  // set subtle variations, could be expanded
+  const scene = document.getElementById('scene');
+  if(temp >= 30) scene.style.background = 'linear-gradient(180deg,#fff2e6,#fff9f2)';
+  else if(temp >= 20) scene.style.background = 'linear-gradient(180deg,#eaf9ed,#f6fff9)';
+  else scene.style.background = 'linear-gradient(180deg,#eef5ff,#f8fbff)';
 
-    // Impact calculations
-    function renderImpact(){
-      const total = galleryData.reduce((s,i)=>s + (i.rawWaste||0), 0);
-      document.getElementById('totalWaste').textContent = total + ' g';
-      const list = document.getElementById('impactList');
-      list.innerHTML = galleryData.map(i=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eee"><div><strong>${escapeHtml(i.title)}</strong><div style="color:#777;font-size:13px">${i.tags.join(', ')}</div></div><div style="font-weight:800">${i.rawWaste||0} g</div></div>`).join('');
-    }
+  // if aqi indicates bad, show warning
+  if(aqi && aqi.toLowerCase().includes('pm25')){
+    sceneMain.style.color = '#c94a4a';
+    sceneSub.style.color = '#a63b3b';
+  } else {
+    sceneMain.style.color = 'var(--accent)';
+    sceneSub.style.color = 'var(--muted)';
+  }
+}
 
-    // search (client-side)
-    function searchSite(){
-      const q = document.getElementById('siteSearch').value.trim().toLowerCase();
-      if(!q) { renderGallery(galleryData); return; }
-      renderGallery(galleryData.filter(i=>(i.title+i.desc+i.tags.join(' ')).toLowerCase().includes(q)));
-    }
+/* =========================
+   Init
+   ========================= */
+renderCalendar(viewYear, viewMonth);
+fetchAndApplyEnvironmentalData();
 
-    // Quick accessibility: close modal with Esc
-    document.addEventListener('keydown', e=>{
-      if(e.key==='Escape') closeModal();
-    });
+/* =========================
+   Accessibility: keyboard quick open
+   ========================= */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'n'){ // open today's record with 'n'
+    quickRecordBtn.click();
+  }
+});
 
-    // initial render
-    renderGallery(galleryData);
-    renderMaterials();
-    renderProjects();
-    renderCommunity();
-    renderImpact();
+/* =========================
+   Final notes & checks (self-validation)
+   - All DOM insertions are guarded and created dynamically.
+   - localStorage is used with STORAGE_KEY.
+   - No external key required for basic operation.
+   - Weather/AQ fetching uses public endpoints (Open-Meteo / OpenAQ). If blocked, falls back.
+   ========================= */
 
-    // small helper to ensure smooth scroll for internal anchors
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', (ev)=>{
-        const target = document.querySelector(a.getAttribute('href'));
-        if(target) { ev.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
-      });
-    });
+</script>
 
-    // basic runtime checks (console)
-    console.log("RE:MAKE SPACE demo initialized. gallery length:", galleryData.length);
-  </script>
 </body>
 </html>
