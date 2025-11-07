@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RE:MAKE SPACE — 업사이클링 디자인 큐레이션</title>
+  <meta name="description" content="폐패션·뷰티 쓰레기를 작품으로: 업사이클링 디자인 갤러리, 튜토리얼, 협업 플랫폼" />
+  <style>
+    /* Reset & base */
+    :root{
+      --bg:#FBFAF6;
+      --accent:#2E8B57; /* sea green */
+      --muted:#7A7A7A;
+      --card:#FFFFFF;
+      --glass: rgba(255,255,255,0.6);
+      --maxw:1200px;
+      --radius:12px;
+      --shadow: 0 6px 18px rgba(20,20,20,0.08);
+      --mono: 'Helvetica Neue', Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--mono);
+      background:linear-gradient(180deg,var(--bg),#F2F6F3);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      -webkit-overflow-scrolling:touch;
+      scroll-behavior:smooth;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--maxw);margin:0 auto;padding:28px;}
+    header{
+      position:sticky;top:0;z-index:60;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+      border-bottom:1px solid rgba(0,0,0,0.04);
+    }
+    .nav{
+      display:flex;align-items:center;gap:18px;padding:12px 28px;
+      justify-content:space-between;
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:48px;height:48px;border-radius:10px;display:grid;place-items:center;
+      background:linear-gradient(135deg,#fff,#F0FFF4);
+      box-shadow:var(--shadow);
+      font-weight:700;color:var(--accent);font-size:18px;
+    }
+    .brand h1{font-size:16px;margin:0}
+    nav ul{display:flex;gap:12px;list-style:none;margin:0;padding:0}
+    nav li{padding:8px 12px;border-radius:10px}
+    nav li a{font-weight:600;color:#333}
+    nav li a:hover{background:var(--glass)}
+    .cta{
+      background:var(--accent);color:white;padding:10px 16px;border-radius:12px;font-weight:700;
+      box-shadow:0 6px 20px rgba(46,139,87,0.18);
+    }
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;padding:44px 0;}
+    .hero-left h2{font-size:34px;margin:0 0 12px}
+    .hero-left p{color:var(--muted);margin:0 0 18px;font-size:16px}
+    .hero-actions{display:flex;gap:12px}
+    .search{
+      display:flex;gap:8px;padding:10px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);align-items:center;
+    }
+    .search input{border:0;outline:none;font-size:14px;width:240px;padding:6px}
+    .hero-right{
+      background:linear-gradient(180deg,#fff,#F7FFF9);
+      border-radius:16px;padding:18px;box-shadow:var(--shadow);
+    }
+    .showcase{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+    }
+    .showcase .chip{background:#F5FFF7;border-radius:10px;padding:10px;font-weight:700;font-size:13px;color:var(--accent)}
+    /* Sections */
+    section{padding:56px 0}
+    h3.section-title{font-size:22px;margin:0 0 18px}
+    .lead{color:var(--muted);margin-bottom:18px}
+
+    /* Gallery */
+    .gallery-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;
+    }
+    .card{background:var(--card);border-radius:14px;padding:12px;box-shadow:var(--shadow);overflow:hidden;}
+    .card img{width:100%;height:180px;object-fit:cover;border-radius:10px}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:#F3F6F4;color:#2B7A55}
+    .btn{display:inline-block;padding:8px 12px;border-radius:10px;background:#EFEFEF;font-weight:700}
+
+    /* Tutorial */
+    .tutorials{display:grid;grid-template-columns:2fr 1fr;gap:18px;align-items:start}
+    .tutorial-card{display:flex;gap:12px;align-items:flex-start}
+    .tutorial-card img{width:120px;height:80px;object-fit:cover;border-radius:10px}
+
+    /* Material library */
+    .material-list{display:flex;gap:12px;flex-wrap:wrap}
+    .material-item{background:linear-gradient(180deg,#fff,#FBFFF9);padding:12px;border-radius:12px;min-width:160px;box-shadow:var(--shadow)}
+
+    /* Upload & community */
+    .upload-box{background:linear-gradient(180deg,#fff,#FEFFFB);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+    input[type=file]{display:block}
+    .u-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:10px}
+
+    /* Collaboration */
+    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+
+    /* Footer */
+    footer{padding:28px 0;color:var(--muted);font-size:14px;border-top:1px solid rgba(0,0,0,0.04);background:transparent}
+    .ownership{font-size:13px;color:#666;margin-top:8px}
+
+    /* Modal */
+    .modal{
+      position:fixed;inset:0;background:rgba(10,10,10,0.5);display:none;align-items:center;justify-content:center;
+      z-index:120;padding:20px;
+    }
+    .modal .modal-card{background:white;border-radius:12px;max-width:900px;width:100%;padding:18px;box-shadow:0 20px 60px rgba(10,10,10,0.35)}
+    .modal img{width:100%;height:380px;object-fit:cover;border-radius:10px}
+
+    /* Responsive tweaks */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr; padding-bottom:12px}
+      .hero-right{order:2}
+      .hero-left{order:1}
+      .tutorials{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <!-- small polar bear hugging globe abstract -->
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#2E8B57" stroke-width="1.2" fill="#E8FFF0"/>
+            <path d="M8 14c1-2 5-2 6 0" stroke="#2E8B57" stroke-linecap="round" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div>
+          <h1>RE:MAKE SPACE</h1>
+          <div style="font-size:12px;color:var(--muted)">폐기물 → 작품 / 업사이클링 큐레이션</div>
+        </div>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#gallery">갤러리</a></li>
+          <li><a href="#tutorials">튜토리얼</a></li>
+          <li><a href="#materials">재료도감</a></li>
+          <li><a href="#community">커뮤니티</a></li>
+          <li><a href="#collab">협업</a></li>
+        </ul>
+      </nav>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <a class="cta" href="#upload">작품 업로드</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <!-- HERO -->
+    <section class="hero" id="home" aria-label="홈">
+      <div class="hero-left">
+        <h2>쓰레기를 디자인으로 다시 불러오기</h2>
+        <p>패션·뷰티 쓰레기(폐의류, 용기, 라벨 등)를 예술적 자원으로 전환하는 큐레이션 플랫폼. 전시, 튜토리얼, 협업으로 창작 생태계를 만듭니다.</p>
+        <div class="hero-actions">
+          <div class="search" role="search" aria-label="검색">
+            <svg width="18" height="18" viewBox="0 0 24 24" style="opacity:.7"><path d="M21 21l-4.35-4.35" stroke="#333" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="11" cy="11" r="6" stroke="#333" stroke-width="1.6" fill="none"/></svg>
+            <input placeholder="작품, 재료, 튜토리얼 검색..." id="siteSearch" />
+            <button class="btn" onclick="searchSite()">검색</button>
+          </div>
+          <a class="btn" href="#gallery">갤러리 보기</a>
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:10px">
+          <div class="chip">환경영향 가시화</div>
+          <div class="chip">디자이너·학생 협업</div>
+          <div class="chip">커뮤니티 참여</div>
+        </div>
+      </div>
+
+      <aside class="hero-right" aria-hidden="false">
+        <strong>오늘의 추천 작품</strong>
+        <div style="height:12px"></div>
+        <div class="showcase">
+          <div class="card" style="padding:10px">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='%23F5FFF7'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='22'>업사이클 백 — 데모</text></svg>" alt="업사이클 백">
+            <div style="margin-top:8px;font-weight:800">Patchwork UpBag</div>
+            <div style="color:var(--muted);font-size:13px">재료: 폐셔츠, 지퍼, 스티커</div>
+          </div>
+
+          <div class="card" style="padding:10px">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='%23FFF8F0'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23B86B3A' font-size='20'>뷰티용기 조명</text></svg>" alt="뷰티 용기 조명">
+            <div style="margin-top:8px;font-weight:800">Glow Jar Lamp</div>
+            <div style="color:var(--muted);font-size:13px">재료: 화장품 용기, LED, 에폭시</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" aria-label="갤러리">
+      <h3 class="section-title">작품 갤러리</h3>
+      <div class="lead">전세계 업사이클링 디자인 사례와 사용자 창작물이 모이는 전시 공간. 클릭하면 상세와 제작과정을 확인할 수 있습니다.</div>
+
+      <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center">
+        <label style="font-weight:700">필터:</label>
+        <select id="filterTag" onchange="filterGallery()">
+          <option value="">전체</option>
+          <option value="섬유">섬유</option>
+          <option value="플라스틱">플라스틱</option>
+          <option value="라벨">라벨·스티커</option>
+          <option value="유리">유리</option>
+        </select>
+        <div style="margin-left:auto;color:var(--muted);font-size:13px">작품 수: <span id="countBadge">0</span></div>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid" aria-live="polite"></div>
+    </section>
+
+    <!-- Tutorials -->
+    <section id="tutorials" aria-label="튜토리얼">
+      <h3 class="section-title">업사이클링 튜토리얼</h3>
+      <div class="lead">초보자도 따라할 수 있는 단계별 가이드와 재료 추천. 영상과 이미지 중심으로 구성되어 있습니다.</div>
+
+      <div class="tutorials">
+        <div>
+          <div class="tutorial-card card">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='100%' height='100%' fill='%23FFF8F0'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23B86B3A' font-size='18'>오래된 티셔츠 가방</text></svg>" alt="">
+            <div>
+              <div style="font-weight:800">티셔츠로 만드는 토트백</div>
+              <div style="color:var(--muted);font-size:13px">난이도: ★★☆☆☆ · 시간: 40분</div>
+              <p style="margin:8px 0;color:var(--muted)">간단한 바느질로 오래된 티셔츠를 멋진 에코백으로 변신시켜요. 패션 쓰레기 감소에 직접 기여합니다.</p>
+              <a class="btn" href="#upload" onclick="document.getElementById('uploadForm').scrollIntoView({behavior:'smooth'})">튜토리얼 보기</a>
+            </div>
+          </div>
+
+          <div class="tutorial-card card" style="margin-top:12px">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='100%' height='100%' fill='%23F5FFF7'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='18'>용기 재활용 조명</text></svg>" alt="">
+            <div>
+              <div style="font-weight:800">뷰티 용기 조명 만들기</div>
+              <div style="color:var(--muted);font-size:13px">난이도: ★★★☆☆ · 시간: 90분</div>
+              <p style="margin:8px 0;color:var(--muted)">투명 용기를 이용한 무드등 제작. 간단한 전기 지식이 필요합니다.</p>
+              <a class="btn" href="#materials">재료 확인</a>
+            </div>
+          </div>
+        </div>
+
+        <aside class="card" style="height:100%">
+          <h4 style="margin:0 0 8px">재료 추천</h4>
+          <div style="color:var(--muted);font-size:13px;margin-bottom:8px">어떤 재료가 업사이클링에 적합한지 빠르게 확인하세요.</div>
+          <div class="material-list" id="materialList">
+            <!-- items populated by JS -->
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Materials -->
+    <section id="materials" aria-label="재료도감">
+      <h3 class="section-title">재료 도감 (Material Library)</h3>
+      <div class="lead">재료별 특성·가공법·주의사항을 정리한 도감. 프로젝트에 맞는 재료를 빠르게 찾을 수 있습니다.</div>
+
+      <div id="materialCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px"></div>
+    </section>
+
+    <!-- Community / Upload -->
+    <section id="community" aria-label="커뮤니티">
+      <h3 class="section-title">커뮤니티 · 작품 업로드</h3>
+      <div class="lead">나의 업사이클링 작품을 업로드하고 피드백을 받아보세요. 권장 형식: 사진 1~5장, 재료 태그, 제작 과정 설명.</div>
+
+      <div class="upload-box card" id="upload">
+        <form id="uploadForm" onsubmit="submitUpload(event)">
+          <div style="display:flex;gap:12px;flex-direction:column">
+            <label>제목</label>
+            <input id="uTitle" required placeholder="작품 제목" />
+
+            <label>설명</label>
+            <textarea id="uDesc" rows="3" placeholder="제작 과정, 사용 재료, 환경적 효과를 적어주세요"></textarea>
+
+            <label>태그 (콤마로 구분)</label>
+            <input id="uTags" placeholder="섬유,플라스틱,라벨" />
+
+            <label>사진 업로드 (최대 5장)</label>
+            <input id="uFiles" type="file" accept="image/*" multiple onchange="previewFiles()" />
+
+            <div class="u-preview" id="uPreview"></div>
+
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn" type="submit">업로드</button>
+              <div style="color:var(--muted);font-size:13px">* 업로드된 작품은 큐레이션 후 공개됩니다.</div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div style="margin-top:18px" id="communityFeed"></div>
+    </section>
+
+    <!-- Collaboration -->
+    <section id="collab" aria-label="협업">
+      <h3 class="section-title">디자이너 · 학생 협업</h3>
+      <div class="lead">팀빌딩, 프로젝트 제안, 재료 제공자 연결까지. 학교 수업용 프로젝트나 전시 협업을 신청하세요.</div>
+
+      <div class="projects" id="projectCards">
+        <!-- populated by JS -->
+      </div>
+    </section>
+
+    <!-- Environment Impact -->
+    <section id="impact" aria-label="환경영향">
+      <h3 class="section-title">환경 영향 가시화</h3>
+      <div class="lead">각 작품이 절감한 폐기물 무게와 대략적 CO₂ 절감 효과를 계산해 보여줍니다 (예시 데이터 기반).</div>
+
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div class="card" style="flex:1;min-width:220px">
+          <h4 style="margin:0 0 8px">총 절감량 (예시)</h4>
+          <div style="font-size:28px;font-weight:800" id="totalWaste">0 g</div>
+          <div style="color:var(--muted);font-size:13px">누적 업사이클링으로 절감된 폐기물 무게</div>
+        </div>
+
+        <div class="card" style="flex:2;min-width:320px;padding:18px">
+          <h4 style="margin-top:0">작품별 영향</h4>
+          <div id="impactList"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+          <strong>RE:MAKE SPACE</strong><br/>
+          <div class="ownership">지적 소유권은 해당 사이트 창립자에게 있습니다. © RE:MAKE SPACE</div>
+        </div>
+        <div style="color:var(--muted)">문의: info@remakespace.local (데모용)</div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Modal for gallery detail -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <button style="float:right" onclick="closeModal()">닫기 ✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    /*****************
+     * Sample Data
+     *****************/
+    const SAMPLE = [
+      {
+        id:"p1", title:"Patchwork UpBag", desc:"여러 오래된 티셔츠 조각을 패치워크해 만든 토트백.", tags:["섬유"], imgs:[], rawWaste:250
+      },
+      {
+        id:"p2", title:"Glow Jar Lamp", desc:"화장품 용기를 모아 만든 무드등.", tags:["플라스틱","유리"], imgs:[], rawWaste:120
+      },
+      {
+        id:"p3", title:"Sticker Collage Wallet", desc:"상품 라벨과 스티커를 코팅해 만든 미니 월렛.", tags:["라벨"], imgs:[], rawWaste:40
+      },
+      {
+        id:"p4", title:"Denim Repair Jacket", desc:"데님 파편을 조합한 재활용 재킷.", tags:["섬유"], imgs:[], rawWaste:800
+      }
+    ];
+
+    // populate initial UI
+    const galleryGrid = document.getElementById('galleryGrid');
+    const materialListEl = document.getElementById('materialList');
+    const materialCards = document.getElementById('materialCards');
+    const projectCards = document.getElementById('projectCards');
+    const communityFeed = document.getElementById('communityFeed');
+    const countBadge = document.getElementById('countBadge');
+
+    let galleryData = [...SAMPLE];
+
+    function renderGallery(data){
+      galleryGrid.innerHTML = '';
+      data.forEach(item=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='400'><rect width='100%' height='100%' fill='%23FFFDF8'/><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='20'>${escapeHtml(item.title)}</text></svg>" alt="${escapeHtml(item.title)}" />
+          <div style="margin-top:8px;font-weight:800">${escapeHtml(item.title)}</div>
+          <div style="color:var(--muted);font-size:13px">${escapeHtml(item.desc)}</div>
+          <div class="meta">
+            <div class="tags">${item.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+            <div><button class="btn" onclick="openDetail('${item.id}')">보기</button></div>
+          </div>
+        `;
+        galleryGrid.appendChild(card);
+      });
+      countBadge.textContent = data.length;
+    }
+
+    function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+
+    function openDetail(id){
+      const item = galleryData.find(d=>d.id===id);
+      if(!item) return;
+      const modal = document.getElementById('modal');
+      document.getElementById('modalContent').innerHTML = `
+        <h2>${escapeHtml(item.title)}</h2>
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='600'><rect width='100%' height='100%' fill='%23F6FFF8'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%232E8B57' font-size='34'>${escapeHtml(item.title)}</text></svg>" alt="${escapeHtml(item.title)}" />
+        <p style="color:var(--muted)">${escapeHtml(item.desc)}</p>
+        <p style="font-weight:700">재료: ${item.tags.join(', ')}</p>
+        <p style="color:var(--muted)">추정 절감 폐기물: ${item.rawWaste} g</p>
+      `;
+      modal.style.display='flex';
+      modal.setAttribute('aria-hidden','false');
+    }
+    function closeModal(){
+      const modal = document.getElementById('modal');
+      modal.style.display='none';
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    // filter gallery
+    function filterGallery(){
+      const f = document.getElementById('filterTag').value;
+      if(!f) renderGallery(galleryData);
+      else renderGallery(galleryData.filter(it=>it.tags.includes(f)));
+    }
+
+    // populate materials
+    const MATERIALS = [
+      {name:"면(코튼) - 폐셔츠", use:"바느질, 패치워크, 가방", note:"세탁 후 사용 권장"},
+      {name:"데님", use:"브랜드 보수/패치", note:"두꺼워 재단 시 공구 필요"},
+      {name:"PET 플라스틱 용기", use:"조명, 투명 아트", note:"라벨 제거 필요"},
+      {name:"화장품 라벨/스티커", use:"콜라주, 코팅 소품", note:"방수 코팅으로 가공 가능"},
+      {name:"유리병", use:"조명, 화분", note:"파편 처리 주의"}
+    ];
+    function renderMaterials(){
+      materialListEl.innerHTML='';
+      MATERIALS.forEach(m=>{
+        const el = document.createElement('div');
+        el.className='material-item';
+        el.innerHTML = `<strong>${m.name}</strong><div style="color:var(--muted);font-size:13px">${m.use}</div><div style="font-size:12px;color:#666;margin-top:6px">${m.note}</div>`;
+        materialListEl.appendChild(el);
+
+        const card = document.createElement('div');
+        card.className='card';
+        card.innerHTML = `<strong>${m.name}</strong><div style="color:var(--muted);font-size:13px">${m.use}</div><div style="font-size:12px;color:#666;margin-top:6px">${m.note}</div>`;
+        materialCards.appendChild(card);
+      });
+    }
+
+    // projects
+    const PROJECTS = [
+      {title:"학교 연계: 업사이클링 워크숍", desc:"디자인과 학생 10명 대상 1일 워크숍", contact:"school@demo"},
+      {title:"브랜드 기부자 연결", desc:"미사용 원단/시제품 기부 협업", contact:"brand@demo"}
+    ];
+    function renderProjects(){
+      projectCards.innerHTML='';
+      PROJECTS.forEach(p=>{
+        const el = document.createElement('div');
+        el.className='card';
+        el.innerHTML = `<div style="font-weight:800">${p.title}</div><div style="color:var(--muted);font-size:13px">${p.desc}</div><div style="margin-top:8px"><a class="btn" href="mailto:${p.contact}">참여 신청</a></div>`;
+        projectCards.appendChild(el);
+      });
+    }
+
+    // community feed initial
+    function renderCommunity(){
+      communityFeed.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">'+
+        galleryData.map(it=>`<div class="card"><strong>${escapeHtml(it.title)}</strong><div style="color:var(--muted);font-size:13px">${escapeHtml(it.desc)}</div></div>`).join('') +
+        '</div>';
+    }
+
+    // upload handling (client-only demo)
+    function previewFiles(){
+      const files = document.getElementById('uFiles').files;
+      const p = document.getElementById('uPreview');
+      p.innerHTML='';
+      Array.from(files).slice(0,5).forEach(file=>{
+        const fr = new FileReader();
+        const box = document.createElement('div');
+        box.style.borderRadius='8px';
+        box.style.overflow='hidden';
+        box.style.height='80px';
+        box.style.background='#f5f6f5';
+        box.style.display='flex';
+        box.style.alignItems='center';
+        box.style.justifyContent='center';
+        box.style.fontSize='12px';
+        box.style.color='#666';
+        box.textContent = '미리보기 준비중...';
+        p.appendChild(box);
+        fr.onload = e => {
+          box.innerHTML = `<img src="${e.target.result}" style="width:auto;height:80px;display:block" />`
+        }
+        fr.readAsDataURL(file);
+      });
+    }
+
+    function submitUpload(e){
+      e.preventDefault();
+      const title = document.getElementById('uTitle').value.trim();
+      const desc = document.getElementById('uDesc').value.trim();
+      const tags = document.getElementById('uTags').value.split(',').map(s=>s.trim()).filter(Boolean);
+      const files = document.getElementById('uFiles').files;
+      // Create a local entry (demo only)
+      const newItem = {
+        id: 'u'+Date.now(),
+        title, desc, tags, imgs:[], rawWaste: estimateWaste(tags, files)
+      };
+      galleryData.unshift(newItem);
+      renderGallery(galleryData);
+      renderCommunity();
+      renderImpact();
+      alert('업로드 완료 (데모): 작품은 큐레이션 후 공개됩니다.');
+      // reset
+      document.getElementById('uploadForm').reset();
+      document.getElementById('uPreview').innerHTML = '';
+    }
+
+    function estimateWaste(tags, files){
+      // rough heuristic: image count * 120g + tag bonus
+      const base = (files ? Math.min(files.length,5) : 1) * 120;
+      const tagBonus = tags.includes('섬유') ? 200 : 0;
+      return base + tagBonus;
+    }
+
+    // Impact calculations
+    function renderImpact(){
+      const total = galleryData.reduce((s,i)=>s + (i.rawWaste||0), 0);
+      document.getElementById('totalWaste').textContent = total + ' g';
+      const list = document.getElementById('impactList');
+      list.innerHTML = galleryData.map(i=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eee"><div><strong>${escapeHtml(i.title)}</strong><div style="color:#777;font-size:13px">${i.tags.join(', ')}</div></div><div style="font-weight:800">${i.rawWaste||0} g</div></div>`).join('');
+    }
+
+    // search (client-side)
+    function searchSite(){
+      const q = document.getElementById('siteSearch').value.trim().toLowerCase();
+      if(!q) { renderGallery(galleryData); return; }
+      renderGallery(galleryData.filter(i=>(i.title+i.desc+i.tags.join(' ')).toLowerCase().includes(q)));
+    }
+
+    // Quick accessibility: close modal with Esc
+    document.addEventListener('keydown', e=>{
+      if(e.key==='Escape') closeModal();
+    });
+
+    // initial render
+    renderGallery(galleryData);
+    renderMaterials();
+    renderProjects();
+    renderCommunity();
+    renderImpact();
+
+    // small helper to ensure smooth scroll for internal anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (ev)=>{
+        const target = document.querySelector(a.getAttribute('href'));
+        if(target) { ev.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
+      });
+    });
+
+    // basic runtime checks (console)
+    console.log("RE:MAKE SPACE demo initialized. gallery length:", galleryData.length);
+  </script>
+</body>
+</html>
